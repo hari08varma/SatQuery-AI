@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<style>
+  .bg    { fill:#0B1220 }
+  .h     { fill:#E8EFF7; font-size:19px; font-weight:600; letter-spacing:.05em }
+  .sub   { fill:#8DA2BC; font-size:13px }
+  .step  { fill:#111B2C; stroke:#22314A; stroke-width:1.5 }
+  .name  { fill:#E8EFF7; font-size:14.5px; font-weight:600 }
+  .mono  { font-family:Consolas,"Courier New",monospace; font-size:11.5px; fill:#8DA2BC }
+  .tagf  { fill:#41D98C; font-size:11.5px; font-weight:600 }
+  .tagt  { fill:#F5A524; font-size:11.5px; font-weight:600 }
+
+  /* the five stages light up in order, 10s loop */
+  .ring { opacity:0; animation:ring 10s linear infinite }
+  @keyframes ring { 0%,2%{opacity:0} 6%,16%{opacity:1} 20%,100%{opacity:0} }
+  #t1 .ring{animation-delay:0s} #t2 .ring{animation-delay:2s} #t3 .ring{animation-delay:4s}
+  #t4 .ring{animation-delay:6s} #t5 .ring{animation-delay:8s}
+
+  .flow { stroke:#4FD1E0; stroke-width:2.5; stroke-dasharray:8 10; animation:march 1.4s linear infinite }
+  @keyframes march { to { stroke-dashoffset:-36 } }
+</style>
+<rect class="bg" width="1000" height="560"/>
+
+<text class="h"   x="40" y="44">4 · HOW WE ACTUALLY TRAIN FOR INDIAN SATELLITES</text>
+<text class="sub" x="40" y="68">The backbones stay frozen throughout. Only the small heads and the LoRA change, so each stage costs hours, not weeks.</text>
+
+<line class="flow" x1="60" y1="150" x2="940" y2="150"/>
+
+<g id="t1">
+  <rect class="step" x="40" y="176" width="172" height="196" rx="12"/>
+  <rect class="ring" x="40" y="176" width="172" height="196" rx="12" fill="none" stroke="#4FD1E0" stroke-width="2"/>
+  <circle cx="72" cy="140" r="16" fill="#0E1A2B" stroke="#4FD1E0" stroke-width="2"/>
+  <text x="72" y="146" text-anchor="middle" fill="#4FD1E0" font-size="15" font-weight="600">1</text>
+  <text class="name" x="62" y="210">Band subset</text>
+  <text class="mono" x="62" y="236">train using only the</text>
+  <text class="mono" x="62" y="254">four Cartosat-matched</text>
+  <text class="mono" x="62" y="272">Sentinel-2 bands</text>
+  <text class="mono" x="62" y="298">nothing the target</text>
+  <text class="mono" x="62" y="316">sensor lacks is learnt</text>
+  <text class="tagf" x="62" y="350">backbone frozen</text>
+</g>
+
+<g id="t2">
+  <rect class="step" x="232" y="176" width="172" height="196" rx="12"/>
+  <rect class="ring" x="232" y="176" width="172" height="196" rx="12" fill="none" stroke="#4FD1E0" stroke-width="2"/>
+  <circle cx="264" cy="140" r="16" fill="#0E1A2B" stroke="#4FD1E0" stroke-width="2"/>
+  <text x="264" y="146" text-anchor="middle" fill="#4FD1E0" font-size="15" font-weight="600">2</text>
+  <text class="name" x="254" y="210">Radiometry</text>
+  <text class="mono" x="254" y="236">convert to surface</text>
+  <text class="mono" x="254" y="254">reflectance, then match</text>
+  <text class="mono" x="254" y="272">Cartosat statistics</text>
+  <text class="mono" x="254" y="298">so brightness shifts</text>
+  <text class="mono" x="254" y="316">never read as change</text>
+  <text class="tagf" x="254" y="350">backbone frozen</text>
+</g>
+
+<g id="t3">
+  <rect class="step" x="424" y="176" width="172" height="196" rx="12"/>
+  <rect class="ring" x="424" y="176" width="172" height="196" rx="12" fill="none" stroke="#4FD1E0" stroke-width="2"/>
+  <circle cx="456" cy="140" r="16" fill="#0E1A2B" stroke="#4FD1E0" stroke-width="2"/>
+  <text x="456" y="146" text-anchor="middle" fill="#4FD1E0" font-size="15" font-weight="600">3</text>
+  <text class="name" x="446" y="210">Scale</text>
+  <text class="mono" x="446" y="236">scale jitter 10 m ↔ 2 m,</text>
+  <text class="mono" x="446" y="254">GSD passed in as an</text>
+  <text class="mono" x="446" y="272">input to the head</text>
+  <text class="mono" x="446" y="298">features stop depending</text>
+  <text class="mono" x="446" y="316">on one pixel size</text>
+  <text class="tagt" x="446" y="350">heads trained</text>
+</g>
+
+<g id="t4">
+  <rect class="step" x="616" y="176" width="172" height="196" rx="12"/>
+  <rect class="ring" x="616" y="176" width="172" height="196" rx="12" fill="none" stroke="#F5A524" stroke-width="2"/>
+  <circle cx="648" cy="140" r="16" fill="#0E1A2B" stroke="#F5A524" stroke-width="2"/>
+  <text x="648" y="146" text-anchor="middle" fill="#F5A524" font-size="15" font-weight="600">4</text>
+  <text class="name" x="638" y="210">Radar</text>
+  <text class="mono" x="638" y="236">train on backscatter,</text>
+  <text class="mono" x="638" y="254">not on a fixed</text>
+  <text class="mono" x="638" y="272">polarisation pair</text>
+  <text class="mono" x="638" y="298">C-band physics carries</text>
+  <text class="mono" x="638" y="316">over; speckle differs</text>
+  <text class="tagt" x="638" y="350">heads + LoRA</text>
+</g>
+
+<g id="t5">
+  <rect class="step" x="808" y="176" width="152" height="196" rx="12"/>
+  <rect class="ring" x="808" y="176" width="152" height="196" rx="12" fill="none" stroke="#F5A524" stroke-width="2"/>
+  <circle cx="840" cy="140" r="16" fill="#0E1A2B" stroke="#F5A524" stroke-width="2"/>
+  <text x="840" y="146" text-anchor="middle" fill="#F5A524" font-size="15" font-weight="600">5</text>
+  <text class="name" x="830" y="210">Fine-tune</text>
+  <text class="mono" x="830" y="236">Indian Sentinel</text>
+  <text class="mono" x="830" y="254">scenes first, then</text>
+  <text class="mono" x="830" y="272">Cartosat / RISAT</text>
+  <text class="mono" x="830" y="298">held-out Indian</text>
+  <text class="mono" x="830" y="316">scenes, per sensor</text>
+  <text class="tagt" x="830" y="350">heads + LoRA</text>
+</g>
+
+<rect x="40" y="404" width="920" height="118" rx="12" fill="#0E1A2B" stroke="#22314A"/>
+<text class="name" x="62" y="434">What changes, and what never does</text>
+<text class="tagf" x="62" y="462">frozen</text>
+<text class="mono" x="130" y="462">TerraMind, EarthDial, GeoGround — the pre-trained weights are never touched</text>
+<text class="tagt" x="62" y="488">trained</text>
+<text class="mono" x="130" y="488">the change head, the fusion head, and the LoRA on the language layer — a few million parameters</text>
+<text class="mono" x="62" y="512" fill="#4FD1E0">reported</text>
+<text class="mono" x="130" y="512">per-sensor scores on held-out Indian scenes, so the gap between Sentinel and Cartosat is measured, never assumed</text>
+</svg>

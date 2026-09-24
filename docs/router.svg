@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<style>
+  .bg    { fill:#0B1220 }
+  .card  { fill:#111B2C; stroke:#22314A; stroke-width:1.5; rx:10 }
+  .name  { fill:#E8EFF7; font-size:17px; font-weight:600 }
+  .stack { fill:#7E93AE; font-size:12.5px }
+  .chip  { font-family:Consolas,"Courier New",monospace; font-size:12.5px }
+  .h     { fill:#E8EFF7; font-size:20px; font-weight:600; letter-spacing:.06em }
+  .sub   { fill:#8DA2BC; font-size:13px }
+  .spine { stroke:#22314A; stroke-width:2 }
+
+  /* one 12s loop: each stage lights for ~2s, in order */
+  .lit   { opacity:0; animation:lit 12s linear infinite }
+  .glow  { opacity:0; animation:lit 12s linear infinite }
+  @keyframes lit {
+     0%,4%   { opacity:0 }
+     7%,14%  { opacity:1 }
+     18%,100%{ opacity:0 }
+  }
+  #s1 .lit, #s1 .glow { animation-delay:0s }
+  #s2 .lit, #s2 .glow { animation-delay:2s }
+  #s3 .lit, #s3 .glow { animation-delay:4s }
+  #s4 .lit, #s4 .glow { animation-delay:6s }
+  #s5 .lit, #s5 .glow { animation-delay:8s }
+
+  /* the request travelling down the spine */
+  .pkt { animation:drop 12s cubic-bezier(.5,0,.5,1) infinite }
+  @keyframes drop {
+     0%   { transform:translateY(0) }
+     14%  { transform:translateY(0) }
+     20%  { transform:translateY(96px) }
+     34%  { transform:translateY(96px) }
+     40%  { transform:translateY(192px) }
+     54%  { transform:translateY(192px) }
+     60%  { transform:translateY(288px) }
+     74%  { transform:translateY(288px) }
+     80%  { transform:translateY(384px) }
+     96%,100% { transform:translateY(384px) }
+  }
+  /* the refusal branch, shown while stage 3 is lit */
+  .refuse { opacity:0; animation:refuse 12s linear infinite }
+  @keyframes refuse {
+     0%,36%   { opacity:0 }
+     40%,52%  { opacity:1 }
+     56%,100% { opacity:0 }
+  }
+</style>
+
+<rect class="bg" width="1000" height="640"/>
+<text class="h" x="40" y="46">THE AGENT ROUTER</text>
+<text class="sub" x="40" y="72">plain code decides what may run — the model never decides alone</text>
+
+<!-- input -->
+<rect x="40" y="96" width="600" height="40" rx="8" fill="#0E1A2B" stroke="#22314A"/>
+<text class="chip" x="60" y="122" fill="#4FD1E0">IN  2 GeoTIFFs  ·  "Find flooded areas hidden by cloud."</text>
+
+<!-- spine + travelling request -->
+<line class="spine" x1="60" y1="150" x2="60" y2="560"/>
+<g class="pkt"><circle cx="60" cy="168" r="7" fill="#4FD1E0"/></g>
+
+<g id="s1">
+  <rect class="card" x="90" y="146" width="620" height="84"/>
+  <rect class="glow" x="90" y="146" width="620" height="84" rx="10" fill="none" stroke="#4FD1E0" stroke-width="2"/>
+  <rect x="98" y="158" width="5" height="52" rx="2" fill="#4FD1E0"/>
+  <text class="name"  x="122" y="176">1 · READ THE INPUT</text>
+  <text class="stack" x="690" y="175" text-anchor="end">Rasterio · GDAL</text>
+  <text class="chip" x="122" y="199" fill="#4FD1E0" opacity=".40">optical + SAR · same area · same grid ✓</text>
+  <text class="chip lit" x="122" y="199" fill="#4FD1E0">optical + SAR · same area · same grid ✓</text>
+  <text class="stack" x="122" y="219" opacity=".7">reads sensor, date, CRS, footprint, pixel size — no AI</text>
+</g>
+
+<g id="s2">
+  <rect class="card" x="90" y="242" width="620" height="84"/>
+  <rect class="glow" x="90" y="242" width="620" height="84" rx="10" fill="none" stroke="#F5A524" stroke-width="2"/>
+  <rect x="98" y="254" width="5" height="52" rx="2" fill="#F5A524"/>
+  <text class="name"  x="122" y="272">2 · PLAN THE TASK</text>
+  <text class="stack" x="690" y="271" text-anchor="end">small LLM + LoRA · Outlines</text>
+  <text class="chip" x="122" y="295" fill="#F5A524" opacity=".40">{"tool": "fusion", "target": "water"}</text>
+  <text class="chip lit" x="122" y="295" fill="#F5A524">{"tool": "fusion", "target": "water"}</text>
+  <text class="stack" x="122" y="315" opacity=".7">constrained decoding — only tools in the registry</text>
+</g>
+
+<g id="s3">
+  <rect class="card" x="90" y="338" width="620" height="84"/>
+  <rect class="glow" x="90" y="338" width="620" height="84" rx="10" fill="none" stroke="#4FD1E0" stroke-width="2"/>
+  <rect x="98" y="350" width="5" height="52" rx="2" fill="#4FD1E0"/>
+  <text class="name"  x="122" y="368">3 · CHECK BEFORE RUNNING</text>
+  <text class="stack" x="690" y="367" text-anchor="end">Python · Pydantic</text>
+  <text class="chip" x="122" y="391" fill="#41D98C" opacity=".40">fusion needs optical + SAR ✓ → RUN</text>
+  <text class="chip lit" x="122" y="391" fill="#41D98C">fusion needs optical + SAR ✓ → RUN</text>
+  <text class="stack" x="122" y="411" opacity=".7">registry requirements vs the file profile</text>
+</g>
+
+<!-- refusal branch -->
+<g class="refuse">
+  <path d="M715 376 L 760 376" stroke="#F26559" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+  <rect x="762" y="352" width="200" height="48" rx="8" fill="#2A1013" stroke="#F26559" stroke-width="1.5"/>
+  <text class="chip" x="862" y="381" fill="#F26559" text-anchor="middle">✗ REFUSE + why</text>
+</g>
+<defs>
+  <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+    <path d="M0 0 L8 4 L0 8 z" fill="#F26559"/>
+  </marker>
+</defs>
+
+<g id="s4">
+  <rect class="card" x="90" y="434" width="620" height="84"/>
+  <rect class="glow" x="90" y="434" width="620" height="84" rx="10" fill="none" stroke="#41D98C" stroke-width="2"/>
+  <rect x="98" y="446" width="5" height="52" rx="2" fill="#41D98C"/>
+  <text class="name"  x="122" y="464">4 · RUN THE SPECIALIST</text>
+  <text class="stack" x="690" y="463" text-anchor="end">PyTorch · TerraTorch · NumPy</text>
+  <text class="chip" x="122" y="487" fill="#41D98C" opacity=".40">TerraMind + fusion head → water mask → km²</text>
+  <text class="chip lit" x="122" y="487" fill="#41D98C">TerraMind + fusion head → water mask → km²</text>
+  <text class="stack" x="122" y="507" opacity=".7">frozen backbone, our head; area measured from the mask</text>
+</g>
+
+<g id="s5">
+  <rect class="card" x="90" y="530" width="620" height="84"/>
+  <rect class="glow" x="90" y="530" width="620" height="84" rx="10" fill="none" stroke="#F5A524" stroke-width="2"/>
+  <rect x="98" y="542" width="5" height="52" rx="2" fill="#F5A524"/>
+  <text class="name"  x="122" y="560">5 · EXPLAIN + LOG</text>
+  <text class="stack" x="690" y="559" text-anchor="end">small LLM · FastAPI</text>
+  <text class="chip" x="122" y="583" fill="#F5A524" opacity=".40">answer + map + confidence + trace</text>
+  <text class="chip lit" x="122" y="583" fill="#F5A524">answer + map + confidence + trace</text>
+  <text class="stack" x="122" y="603" opacity=".7">writes from the evidence only; every number checked</text>
+</g>
+
+<!-- legend -->
+<text class="stack" x="762" y="150">legend</text>
+<rect x="762" y="162" width="12" height="12" rx="3" fill="#4FD1E0"/><text class="stack" x="784" y="173">our code</text>
+<rect x="762" y="186" width="12" height="12" rx="3" fill="#F5A524"/><text class="stack" x="784" y="197">trained by us</text>
+<rect x="762" y="210" width="12" height="12" rx="3" fill="#41D98C"/><text class="stack" x="784" y="221">frozen model + head</text>
+<rect x="762" y="234" width="12" height="12" rx="3" fill="#F26559"/><text class="stack" x="784" y="245">refusal path</text>
+</svg>

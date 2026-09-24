@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<style>
+  .bg   { fill:#0B1220 }
+  .h    { fill:#E8EFF7; font-size:19px; font-weight:600; letter-spacing:.05em }
+  .sub  { fill:#8DA2BC; font-size:13px }
+  .lbl  { fill:#C8D6E6; font-size:13px }
+  .mono { font-family:Consolas,"Courier New",monospace; font-size:12px; fill:#8DA2BC }
+  .axis { stroke:#2A3B55; stroke-width:1.5 }
+  .tick { fill:#6E85A2; font-size:11px; font-family:Consolas,monospace }
+  .note { fill:#41D98C; font-size:13px; font-weight:600 }
+
+  /* the pairing lines draw themselves, one band after another */
+  .link { stroke:#4FD1E0; stroke-width:2; stroke-dasharray:60; stroke-dashoffset:60;
+          animation:draw 8s ease-in-out infinite }
+  @keyframes draw {
+    0%,6%    { stroke-dashoffset:60; opacity:.25 }
+    16%,74%  { stroke-dashoffset:0;  opacity:1 }
+    88%,100% { stroke-dashoffset:0;  opacity:.25 }
+  }
+  #l1 { animation-delay:0s } #l2 { animation-delay:.45s }
+  #l3 { animation-delay:.9s } #l4 { animation-delay:1.35s }
+
+  .pulse { animation:pulse 8s ease-in-out infinite }
+  @keyframes pulse { 0%,60%{ opacity:.35 } 70%,86%{ opacity:1 } 96%,100%{ opacity:.35 } }
+</style>
+<rect class="bg" width="1000" height="800"/>
+
+<!-- ============================== 1. optical bands -->
+<text class="h"   x="40" y="44">1 · THE OPTICAL BANDS ALREADY LINE UP</text>
+<text class="sub" x="40" y="68">Cartosat-2S MX carries four bands. Sentinel-2 carries the same four, plus more we simply do not use.</text>
+
+<text class="lbl" x="40" y="112">Sentinel-2 MSI — what we train on</text>
+<rect x="40" y="124" width="128" height="34" rx="5" fill="#2E6DD6" opacity=".85"/><text class="mono" x="104" y="146" text-anchor="middle" fill="#EAF2FF">B2 blue</text>
+<rect x="196" y="124" width="112" height="34" rx="5" fill="#35A05A" opacity=".85"/><text class="mono" x="252" y="146" text-anchor="middle" fill="#EAF2FF">B3 green</text>
+<rect x="336" y="124" width="104" height="34" rx="5" fill="#C0392B" opacity=".85"/><text class="mono" x="388" y="146" text-anchor="middle" fill="#EAF2FF">B4 red</text>
+<rect x="470" y="124" width="150" height="34" rx="5" fill="#8B7BE8" opacity=".85"/><text class="mono" x="545" y="146" text-anchor="middle" fill="#EAF2FF">B8 NIR</text>
+<rect x="648" y="124" width="300" height="34" rx="5" fill="#1A2740" stroke="#2A3B55"/><text class="mono" x="798" y="146" text-anchor="middle">B1 · B5–B7 · B9–B12 — unused</text>
+
+<!-- pairing lines -->
+<line class="link" id="l1" x1="104" y1="166" x2="104" y2="238"/>
+<line class="link" id="l2" x1="252" y1="166" x2="252" y2="238"/>
+<line class="link" id="l3" x1="388" y1="166" x2="388" y2="238"/>
+<line class="link" id="l4" x1="545" y1="166" x2="545" y2="238"/>
+
+<text class="lbl" x="40" y="272">Cartosat-2S MX — what it must run on</text>
+<rect x="40" y="238" width="128" height="0" /><!-- spacer -->
+<rect x="40" y="284" width="128" height="34" rx="5" fill="#2E6DD6" opacity=".85"/><text class="mono" x="104" y="306" text-anchor="middle" fill="#EAF2FF">0.43–0.52</text>
+<rect x="196" y="284" width="112" height="34" rx="5" fill="#35A05A" opacity=".85"/><text class="mono" x="252" y="306" text-anchor="middle" fill="#EAF2FF">0.52–0.61</text>
+<rect x="336" y="284" width="104" height="34" rx="5" fill="#C0392B" opacity=".85"/><text class="mono" x="388" y="306" text-anchor="middle" fill="#EAF2FF">0.61–0.69</text>
+<rect x="470" y="284" width="150" height="34" rx="5" fill="#8B7BE8" opacity=".85"/><text class="mono" x="545" y="306" text-anchor="middle" fill="#EAF2FF">0.76–0.90 µm</text>
+<text class="mono" x="648" y="306">+ PAN 0.65 m</text>
+
+<line class="axis" x1="40" y1="336" x2="948" y2="336"/>
+<text class="tick" x="40"  y="354">0.40</text>
+<text class="tick" x="250" y="354">0.55</text>
+<text class="tick" x="460" y="354">0.70</text>
+<text class="tick" x="640" y="354">0.90 µm</text>
+<text class="note pulse" x="700" y="356">same four bands → the weights transfer</text>
+
+<!-- ============================== 2. resolution -->
+<text class="h"   x="40" y="410">2 · THE GAP IS RESOLUTION, NOT COLOUR</text>
+<text class="sub" x="40" y="434">So we train across scales instead of memorising one. Same scene, three ground sample distances.</text>
+
+<g>
+  <rect x="40" y="454" width="150" height="150" fill="#12203A" stroke="#2A3B55"/>
+  <g stroke="#2A3B55" stroke-width="1">
+    <path d="M40 504h150M40 554h150M90 454v150M140 454v150"/>
+  </g>
+  <text class="mono" x="115" y="624" text-anchor="middle" fill="#C8D6E6">Sentinel-2 · 10 m</text>
+</g>
+<text class="lbl" x="212" y="534">→</text>
+<g>
+  <rect x="244" y="454" width="150" height="150" fill="#12203A" stroke="#2A3B55"/>
+  <g stroke="#2A3B55" stroke-width=".7">
+    <path d="M244 484h150M244 514h150M244 544h150M244 574h150M274 454v150M304 454v150M334 454v150M364 454v150"/>
+  </g>
+  <text class="mono" x="319" y="624" text-anchor="middle" fill="#C8D6E6">Cartosat-2S MX · 2 m</text>
+</g>
+<text class="lbl" x="416" y="534">→</text>
+<g>
+  <rect x="448" y="454" width="150" height="150" fill="#12203A" stroke="#2A3B55"/>
+  <g stroke="#2A3B55" stroke-width=".4" opacity=".8">
+    <path d="M448 469h150M448 484h150M448 499h150M448 514h150M448 529h150M448 544h150M448 559h150M448 574h150M448 589h150
+             M463 454v150M478 454v150M493 454v150M508 454v150M523 454v150M538 454v150M553 454v150M568 454v150M583 454v150"/>
+  </g>
+  <text class="mono" x="523" y="624" text-anchor="middle" fill="#C8D6E6">Cartosat PAN · 0.65 m</text>
+</g>
+<rect x="640" y="454" width="308" height="150" rx="10" fill="#111B2C" stroke="#22314A"/>
+<text class="lbl"  x="662" y="484">How we close it</text>
+<text class="mono" x="662" y="510">· scale jitter during fine-tuning</text>
+<text class="mono" x="662" y="532">· chips resampled 10 m → 2 m and back</text>
+<text class="mono" x="662" y="554">· GSD given to the model as an input</text>
+<text class="mono" x="662" y="576">· PAN-sharpened chips for the 0.65 m case</text>
+
+<!-- ============================== 3. radar -->
+<text class="h"   x="40" y="664">3 · THE RADAR IS ALREADY THE SAME BAND</text>
+<text class="sub" x="40" y="688">Sentinel-1 and RISAT both image in C-band, about 1% apart in frequency, so the backscatter behaves the same way.</text>
+
+<rect x="40" y="710" width="700" height="22" rx="5" fill="#1A2740" stroke="#2A3B55"/>
+<circle class="pulse" cx="259" cy="721" r="6" fill="#4FD1E0"/>
+<circle class="pulse" cx="268" cy="721" r="6" fill="#F5A524"/>
+<line x1="257" y1="732" x2="205" y2="758" stroke="#4FD1E0" stroke-width="1.5"/>
+<line x1="270" y1="732" x2="330" y2="758" stroke="#F5A524" stroke-width="1.5"/>
+<text class="mono" x="60"  y="774" fill="#4FD1E0">Sentinel-1  5.405 GHz</text>
+<text class="mono" x="336" y="774" fill="#F5A524">RISAT  5.35 GHz</text>
+<text class="tick" x="560" y="774">4 GHz  ·····  8 GHz   the whole C-band</text>
+
+<rect x="770" y="694" width="190" height="60" rx="10" fill="#111B2C" stroke="#22314A"/>
+<text class="note" x="790" y="720">transfers directly</text>
+<text class="mono" x="790" y="742">wavelength · water response</text>
+</svg>
