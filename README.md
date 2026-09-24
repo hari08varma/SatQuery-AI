@@ -2,7 +2,7 @@
 
 **Ask a satellite image a question. Get an answer you can audit.**
 
-An interactive vision–language assistant for multimodal remote sensing image analysis through text — Smart India Hackathon 2026, problem statement **SIH26167**.
+An interactive vision–language assistant for multimodal remote sensing image analysis through text 
 
 ▶ **[Interactive walkthrough — see the flow](https://satquery-ai.vercel.app)**
 
